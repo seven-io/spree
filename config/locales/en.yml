@@ -6,7 +6,6 @@ en:
     admin:
       tab:
         seven: 'seven'
-    debug: Debug
     errors: Errors
     filter:
       address: Address Filters
