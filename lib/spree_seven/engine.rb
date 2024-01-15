@@ -1,16 +1,23 @@
 module SpreeSeven
   class Engine < Rails::Engine
     require 'spree/core'
+    require 'spree/backend'
+
     isolate_namespace Spree
     engine_name 'spree_seven'
 
-    # use rspec for tests
-    config.generators do |g|
+    config.autoload_paths += %W[#{config.root}/lib]
+
+    config.generators do |g| # use rspec for tests
       g.test_framework :rspec
     end
 
     initializer 'spree_seven.environment', before: :load_config_initializers do |_app|
-      SpreeSeven::Config = SpreeSeven::Configuration.new
+      Config = Configuration.new
+    end
+
+    config.after_initialize do
+      Spree::Seven::Config = Spree::SevenSetting.new
     end
 
     def self.activate

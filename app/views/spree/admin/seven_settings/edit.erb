@@ -1,0 +1,25 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:seven_settings, scope: :spree_seven) %>
+<% end %>
+
+<%= form_tag admin_seven_settings_path, method: :post do %>
+  <div class='row'>
+    <div class='col-12 col-md-6' data-hook='seven'>
+      <div class='form-group'>
+        <%= preference_field_tag :enabled, Spree::Seven::Config[:enabled], type: :boolean %>
+        <%= label_tag 'enabled', Spree.t('enabled?', scope: :spree_seven) %>
+      </div>
+
+      <div class='form-group'>
+        <%= label_tag 'api_key', Spree.t('api_key', scope: :spree_seven) %>
+        <%= password_field_tag 'api_key', Spree::Seven::Config[:api_key], class: 'form-control' %>
+      </div>
+
+      <div class='col'>
+        <div class='form-actions' data-hook='buttons'>
+          <%= button Spree.t('actions.update'), 'update' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

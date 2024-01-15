@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-require 'seven_api/client'
+require 'uri'
+require 'net/http'
+require 'net/https'
+require 'json'
 
 module Spree
   module Admin
@@ -24,10 +27,12 @@ module Spree
       private
 
       def build_recipients(as_array = false)
+        Rails.logger.info 'build_recipients'
+
         to = []
 
         Spree::Address.not_deleted.each { |a|
-          Rails.logger.debug a.inspect
+          Rails.logger.info a.inspect
 
           next if !a.deleted_at.nil? && params[:filter_include_deleted_addresses] == '0'
           next if params[:filter_address_country] != '' && params[:filter_address_country] != !a.country_id
@@ -36,7 +41,7 @@ module Spree
         }
 
         if to.empty?
-          @user_errors.push(I18n.t 'spree.no_recipients')
+          @user_errors.push(I18n.t 'spree.spree_seven.no_recipients')
         end
 
         to.uniq!
@@ -45,18 +50,23 @@ module Spree
       end
 
       def api_key
-        if SpreeSeven::Config[:api_key]
-          Rails.logger.debug 'ApiKeyFromConfiguration'
-          return SpreeSeven::Config[:api_key]
+        source = nil
+        value = nil
+
+        if Spree::Seven::Config[:api_key]
+          source = 'Configuration'
+          value = Spree::Seven::Config[:api_key]
+        elsif ENV['SEVEN_API_KEY_SANDBOX']
+          source = 'Environment (Sandbox)'
+          value = ENV['SEVEN_API_KEY_SANDBOX']
+        elsif ENV['SEVEN_API_KEY']
+          source = 'Environment (Live)'
+          value = ENV['SEVEN_API_KEY']
         end
-        if ENV['SEVEN_API_KEY_SANDBOX']
-          Rails.logger.debug 'SandboxApiKeyFromEnvironment'
-          return ENV['SEVEN_API_KEY_SANDBOX']
-        end
-        if ENV['SEVEN_API_KEY']
-          Rails.logger.debug 'ApiKeyFromEnvironment'
-          ENV['SEVEN_API_KEY']
-        end
+
+        Rails.logger.info "api_key: #{value} from #{source}"
+
+        value
       end
 
       def build_params
@@ -68,16 +78,32 @@ module Spree
           :no_reload,
           :performance_tracking,
           :text,
-        ).merge({ json: true, to: build_recipients })
+        ).merge({ to: build_recipients })
 
-        Rails.logger.debug sms_params
+        Rails.logger.info sms_params
 
         sms_params
       end
 
       def send_sms
         if @user_errors.empty?
-          SevenApi::Resources::Sms.new(api_key).retrieve(build_params)
+          uri = URI('https://gateway.seven.io/api/sms')
+
+          res = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+            req = Net::HTTP::Post.new(uri)
+            req['Accept'] = 'application/json'
+            req['Content-Type'] = 'application/json'
+            req['X-Api-Key'] = api_key
+            req.body = build_params.to_json
+
+            http.request req
+          end
+
+          Rails.logger.info res.body
+
+          res
+        else
+          Rails.logger.info 'FoundUserErrors'
         end
       end
     end

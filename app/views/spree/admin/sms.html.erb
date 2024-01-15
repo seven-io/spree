@@ -1,13 +1,13 @@
-<h1><%= t('spree.sms') %></h1>
+<h1><%= t('spree.spree_seven.sms') %></h1>
 
 <% @user_errors.each do |err| %>
-  <div class="alert alert-danger">
+  <div class='alert alert-danger'>
     <%= err %>
   </div>
 <% end %>
 
 <% if @user_message %>
-  <%= content_tag :h2, Spree.t('spree.response') %>
+  <%= content_tag :h2, Spree.t('spree.spree_seven.response') %>
   <pre><%= @user_message %></pre>
 <% end %>
 
@@ -15,10 +15,10 @@
   <div class='row'>
     <div class='col-12 col-md-6'>
       <fieldset>
-        <legend><%= t('spree.filter.address') %></legend>
+        <legend><%= t('spree.spree_seven.filter.address') %></legend>
 
         <div class='form-group justify-content-between d-flex'>
-          <%= f.label :filter_include_deleted_addresses, t('spree.filter.include_deleted_addresses') %>
+          <%= f.label :filter_include_deleted_addresses, t('spree.spree_seven.filter.include_deleted_addresses') %>
           <%= f.check_box :filter_include_deleted_addresses %>
         </div>
 
@@ -37,45 +37,45 @@
       <hr>
 
       <div class='form-group justify-content-between d-flex'>
-        <%= f.label :performance_tracking, t('spree.performance_tracking') %>
+        <%= f.label :performance_tracking, t('spree.spree_seven.performance_tracking') %>
         <%= f.check_box :performance_tracking %>
       </div>
 
       <div class='form-group justify-content-between d-flex'>
-        <%= f.label :flash, t('spree.flash') %>
+        <%= f.label :flash, t('spree.spree_seven.flash') %>
         <%= f.check_box :flash %>
       </div>
 
       <div class='form-group justify-content-between d-flex'>
-        <%= f.label :no_reload, t('spree.no_reload') %>
+        <%= f.label :no_reload, t('spree.spree_seven.no_reload') %>
         <%= f.check_box :no_reload %>
       </div>
 
       <div class='form-group'>
-        <%= f.label :label, t('spree.label') %>
+        <%= f.label :label, t('spree.spree_seven.label') %>
         <%= f.text_field :label, class: 'form-control', maxlength: 100 %>
       </div>
 
       <div class='form-group'>
-        <%= f.label :foreign_id, t('spree.foreign_id') %>
+        <%= f.label :foreign_id, t('spree.spree_seven.foreign_id') %>
         <%= f.text_field :foreign_id, class: 'form-control', maxlength: 64 %>
       </div>
 
       <div class='form-group'>
-        <%= f.label :from, t('spree.from') %>
+        <%= f.label :from, t('spree.spree_seven.from') %>
         <%= f.text_field :from, class: 'form-control', maxlength: 16 %>
       </div>
     </div>
 
     <div class='col-12 col-md-6'>
       <div class='form-group'>
-        <%= f.label :text, t('spree.text') %>
+        <%= f.label :text, t('spree.spree_seven.text') %>
         <%= f.text_area :text, class: 'form-control required', maxlength: 1520, required: true, rows: 10 %>
       </div>
     </div>
   </div>
 
-  <div class="form-actions" data-hook="buttons">
-    <%= f.submit t('spree.send'), class: 'btn btn-primary' %>
+  <div class='form-actions' data-hook='buttons'>
+    <%= f.submit t('spree.spree_seven.send'), class: 'btn btn-primary' %>
   </div>
 <% end %>

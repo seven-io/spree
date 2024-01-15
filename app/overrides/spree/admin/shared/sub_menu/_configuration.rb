@@ -1,9 +1,9 @@
 Deface::Override.new(
-  virtual_path:  'spree/admin/shared/sub_menu/_configuration',
+  insert_bottom: '[data-hook=\'admin_configurations_sidebar_menu\']',
   name:          'add_seven_admin_menu_links',
-  insert_bottom: "[data-hook='admin_configurations_sidebar_menu']"
+  virtual_path:  'spree/admin/shared/sub_menu/_configuration',
 ) do
   <<~HTML
-    <%= configurations_sidebar_menu_item(Spree.t('spree.seven'), 'admin/settings/xxxxx') %>
+    <%= configurations_sidebar_menu_item('Seven', edit_admin_seven_settings_path) %>
   HTML
 end

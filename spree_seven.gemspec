@@ -8,9 +8,9 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_seven'
   s.version     = SpreeSeven.version
-  s.summary = 'Send SMS to your customers via seven.'
+  s.summary     = 'Send SMS to your customers via seven.'
   s.description = s.summary
-  s.required_ruby_version = '>= 2.5'
+  s.required_ruby_version = '>= 3.0'
 
   s.author    = 'seven communications GmbH & Co. KG'
   s.email     = 'support@seven.io'
@@ -21,8 +21,9 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree', '>= 4.3.0'
-  s.add_dependency 'spree_backend' # uncomment to include Admin Panel changes
+  spree_version = '>= 4.3.0'
+  s.add_dependency 'spree', spree_version
+  s.add_dependency 'spree_backend', spree_version
   s.add_dependency 'spree_extension'
   s.add_dependency 'deface', '~> 1.0'
 
