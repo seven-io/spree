@@ -10,7 +10,7 @@ module Spree
           settings[name] = value
         end
 
-        flash[:success] = Spree.t(:successfully_updated, resource: Spree.t(:seven_settings, scope: :spree_seven))
+        flash[:success] = Spree.t(:successfully_updated, resource: Spree.t('seven.settings'))
 
         redirect_to edit_admin_seven_settings_path
       end

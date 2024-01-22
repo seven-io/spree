@@ -1,0 +1,137 @@
+<% content_for :page_title do %>
+  <%= Spree.t('seven.sms') %>
+<% end %>
+
+<% @user_errors.each do |err| %>
+  <div class='alert alert-danger'>
+    <%= err %>
+  </div>
+<% end %>
+
+<%= content_tag :h2, Spree.t('seven.response') %>
+<pre id='response'><%= @user_message %></pre>
+
+
+<%= form_with local: false, url: admin_seven_sms_url(only_path: true), method: :post, id: 'sevenSMS' do |f| %>
+  <div class='row'>
+    <div class='col-12 col-md-6'>
+      <fieldset>
+        <legend><%= Spree.t('seven.filter.address') %></legend>
+
+        <div class='form-group justify-content-between d-flex'>
+          <%= f.label :filter_include_deleted_addresses, Spree.t('seven.filter.include_deleted_addresses') %>
+          <%= f.check_box :filter_include_deleted_addresses %>
+        </div>
+
+        <div class='form-group'>
+          <div class='field'>
+            <%= f.label :filter_address_country, Spree::Country.model_name.human %>
+            <%= select_tag "filter_address_country", options_from_collection_for_select(all_countries, 'id', 'name'), class: 'custom-select form-control js-country_id', include_blank: true %>
+          </div>
+        </div>
+      </fieldset>
+
+      <hr>
+
+      <div class='form-group justify-content-between d-flex'>
+        <%= f.label :performance_tracking, Spree.t('seven.performance_tracking') %>
+        <%= f.check_box :performance_tracking %>
+      </div>
+
+      <div class='form-group justify-content-between d-flex'>
+        <%= f.label :flash, Spree.t('seven.flash') %>
+        <%= f.check_box :flash %>
+      </div>
+
+      <div class='form-group justify-content-between d-flex'>
+        <%= f.label :no_reload, Spree.t('seven.no_reload') %>
+        <%= f.check_box :no_reload %>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :label, Spree.t('seven.label') %>
+        <%= text_field_tag(:label, nil, {class: 'form-control', maxlength: 100}) %>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :foreign_id, Spree.t('seven.foreign_id') %>
+        <%= text_field_tag(:foreign_id, nil, {class: 'form-control', maxlength: 64}) %>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :from, Spree.t('seven.from') %>
+        <%= text_field_tag(:from, nil, {class: 'form-control', maxlength: 16}) %>
+      </div>
+
+      <div class='form-group'>
+        <%= f.label :to, Spree.t('seven.to') %>
+        <%= text_field_tag(:to, nil, {class: 'form-control'}) %>
+      </div>
+    </div>
+
+    <div class='col-12 col-md-6'>
+      <div class='form-group'>
+        <%= f.label :text, Spree.t('seven.text') %>
+        <%= text_area_tag :text, nil, {
+          class: 'form-control required',
+          maxlength: 1520,
+          required: true,
+          rows: 10
+        } %>
+      </div>
+    </div>
+
+    <div class='form-actions' data-hook='buttons'>
+      <%= f.submit Spree.t('seven.send'), {'class': 'btn btn-primary'} %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const $form = document.getElementById('sevenSMS')
+    const $to = $form.elements.namedItem('to')
+    const to = urlParams.get('to');
+    const $countryFilter = $form.elements.namedItem('filter_address_country')
+    const $deletedFilter = document.getElementById('filter_include_deleted_addresses')
+    const $csrfToken = $form.elements.namedItem('authenticity_token')
+    const $submit = $form.elements.namedItem('commit')
+    const $response = document.getElementById('response')
+
+    $submit.addEventListener('click', async e => {
+      e.preventDefault()
+
+      $submit.setAttribute('disabled', 'disabled')
+
+      const fd = new FormData($form)
+      const params = new URLSearchParams(fd)
+      const res = await fetch('/admin/seven/sms', {
+        body: JSON.stringify(params),
+        headers: {
+          'X-CSRF-Token': $csrfToken.value
+        },
+        method: 'POST'
+      })
+      const {response} = await res.json()
+      $response.innerText = response
+
+      $submit.removeAttribute('disabled')
+    })
+
+    $to.addEventListener('input', () => {
+      if ($to.value !== '') {
+        $countryFilter.setAttribute('disabled', 'disabled')
+        $deletedFilter.setAttribute('disabled', 'disabled')
+      } else {
+        $countryFilter.removeAttribute('disabled')
+        $deletedFilter.removeAttribute('disabled')
+      }
+    })
+
+    if (to?.length) {
+      $to.value = to
+      $to.dispatchEvent(new Event('input', {'bubbles': true}))
+    }
+  })
+</script>

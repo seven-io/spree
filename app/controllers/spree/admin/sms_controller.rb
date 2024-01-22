@@ -15,19 +15,21 @@ module Spree
         @user_errors = []
       end
 
-      def index(user_message = nil)
-        @user_message = user_message
-        render 'spree/admin/sms'
+      def index
+        render 'spree/admin/sms/index'
       end
 
       def submit
-        index(send_sms)
+        @user_message = send_sms
+        render json: {'response': @user_message}
       end
 
       private
 
       def build_recipients(as_array = false)
-        Rails.logger.info 'build_recipients'
+        if params[:to] != ''
+          return as_array ? [params[:to]] : params[:to]
+        end
 
         to = []
 
@@ -41,7 +43,7 @@ module Spree
         }
 
         if to.empty?
-          @user_errors.push(I18n.t 'spree.spree_seven.no_recipients')
+          @user_errors.push(I18n.t 'spree.seven.no_recipients')
         end
 
         to.uniq!
@@ -64,7 +66,7 @@ module Spree
           value = ENV['SEVEN_API_KEY']
         end
 
-        Rails.logger.info "api_key: #{value} from #{source}"
+        Rails.logger.info "seven api_key: #{value} from #{source}"
 
         value
       end
@@ -89,7 +91,7 @@ module Spree
         if @user_errors.empty?
           uri = URI('https://gateway.seven.io/api/sms')
 
-          res = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+          res = Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
             req = Net::HTTP::Post.new(uri)
             req['Accept'] = 'application/json'
             req['Content-Type'] = 'application/json'
@@ -101,7 +103,9 @@ module Spree
 
           Rails.logger.info res.body
 
-          res
+          # flash[:success] = res.body
+
+          res.body
         else
           Rails.logger.info 'FoundUserErrors'
         end

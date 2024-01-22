@@ -3,10 +3,9 @@ en:
   spree:
     admin:
       tab:
-        seven: 'seven'
-    spree_seven:
+        seven: seven
+    seven:
       api_key: API Key
-      enabled?: Enabled?
       errors: Errors
       filter:
         address: Address Filters
@@ -15,10 +14,13 @@ en:
       foreign_id: Foreign ID
       from: From
       label: Label
+      name: Seven
       no_recipients: No recipients found for the given configuration.
       no_reload: Allow duplicates
       performance_tracking: Performance Tracking
       response: Response
       send: Send
+      settings: Settings
       sms: SMS
       text: Text
+      to: To

@@ -4,9 +4,8 @@ de:
     admin:
       tab:
         seven: seven
-    spree_seven:
+    seven:
       api_key: API-Schlüssel
-      enabled?: Aktiv?
       errors: Fehler
       filter:
         address: Address-Filter
@@ -15,10 +14,13 @@ de:
       foreign_id: Foreign ID
       from: Von
       label: Label
+      name: Seven
       no_recipients: Keine Empfangsziele gefunden mit dieser Konfiguration.
       no_reload: Duplikate erlauben
       performance_tracking: Performance Tracking
       response: Antwort
       send: Senden
+      settings: Einstellungen
       sms: SMS
       text: Text
+      to: An
