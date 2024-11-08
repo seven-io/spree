@@ -2,7 +2,7 @@
 
 # SpreeSeven
 
-Introduction goes here.
+This gem adds the functionality to send SMS via seven.
 
 ## Installation
 
@@ -27,6 +27,11 @@ Introduction goes here.
 4. Restart your server
 
   If your server was running, restart it so that it can find the assets properly.
+
+## Functionalities
+### Bulk SMS
+Send SMS to all your customers at once.
+You can filter by country, to target only customers from a specific country.
 
 ## Testing
 
