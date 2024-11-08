@@ -77,7 +77,6 @@ module Spree
           :foreign_id,
           :from,
           :label,
-          :no_reload,
           :performance_tracking,
           :text,
         ).merge({ to: build_recipients })

@@ -16,7 +16,6 @@ en:
       label: Label
       name: Seven
       no_recipients: No recipients found for the given configuration.
-      no_reload: Allow duplicates
       performance_tracking: Performance Tracking
       response: Response
       send: Send

@@ -16,7 +16,6 @@ de:
       label: Label
       name: Seven
       no_recipients: Keine Empfangsziele gefunden mit dieser Konfiguration.
-      no_reload: Duplikate erlauben
       performance_tracking: Performance Tracking
       response: Antwort
       send: Senden
